@@ -12,11 +12,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-
+from configparser import ConfigParser
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+config = ConfigParser()
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+CONFIGURATION_PATH = os.path.join(BASE_DIR,'configration')
+config.read(f'{CONFIGURATION_PATH}/frbas_config.cfg')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -76,8 +77,14 @@ WSGI_APPLICATION = 'FRBAS.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config.get('DATABASE', 'ENGINE'),
+        'NAME': config.get('DATABASE', 'NAME'),
+        'USER':config.get('DATABASE', 'USER'),
+        'PASSWORD': config.get('DATABASE', 'PASSWORD'),
+        'HOST': config.get('DATABASE', 'HOST'),
+        'PORT': config.get('DATABASE', 'PORT'),
+        'CHARSET':config.get('DATABASE', 'CHARSET'),
+        'COLLATION':config.get('DATABASE', 'COLLATION'),
     }
 }
 

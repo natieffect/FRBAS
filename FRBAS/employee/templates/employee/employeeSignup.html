@@ -28,6 +28,12 @@
               <option value="{{countryval.value}}">{{countryval.name}}</option>
             {%endfor%}
         </select>
+        <label for="autority">Authority</label>
+        <select name="autority" id="autority" required>
+            {%for autorityval in autority%}
+              <option value="{{autorityval.value}}">{{autorityval.name}}</option>
+            {%endfor%}
+        </select>
          <input type="submit" value="Submit">
     </form>
 

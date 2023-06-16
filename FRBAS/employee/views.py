@@ -13,4 +13,18 @@ def employeeSignUp(request):
 # Employee Account Password Change
 def employeeAccountPassword(request):
      employee = EmployeeScript()
-     pass
+     if request.method == "POST":
+         request = employee.employeePassword(request)
+
+# Employee Sign in
+def employeeSignIn(request):
+     success = False
+     employee = EmployeeScript()
+     if request.method == "POST":
+         request,success = employee.employeeSignIn(request)
+         if success:
+             pass
+         else:
+             pass
+     return render(request,"employee/employeeSignIn.html",{})
+

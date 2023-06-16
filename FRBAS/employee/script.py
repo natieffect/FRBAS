@@ -18,8 +18,9 @@ class EmployeeScript:
                                    gender = request.POST.get("gender"),
                                    coutry = request.POST.get("country"))
              
-             account = Account(user=employee,password=self.mainscript.config.get("DEFAULT","PASSWORD"),autority="")
-             
+             account = Account(user=employee,password=make_password(self.mainscript.config.get("DEFAULT","PASSWORD")),autority=request.POST.get("autority"))
+             employee.save()
+             account.save()
              request = self.mainscript.set_message("success","EMPLOYEE_SIGN_UP","SIGNUP_SUCCESS",request)
         except Exception as e: 
              print(e)
@@ -55,7 +56,22 @@ class EmployeeScript:
                     employee.password = make_password(request.POST['password'])
                     request = self.mainscript.set_message("success","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_SUCCESS",request)
               else:
-                    request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
+                    request = self.mainscript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
          except Exception as e:
                print(e)
                request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_TWO",request)
+         return request
+
+#    Employee Log in
+    def employeeSignIn(self,request):
+          success = False
+          try:
+              account = Account.objects.get(user__email=request.POST['email'])
+              if check_password(request.POST['password'],account.password):
+                   request,success = self.mainscript.login_sesstion(account,request)
+              else:
+                   request = self.mainscript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
+          except Exception as e:
+                request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_LOGIN_ERROR",request)
+                print(e)
+          return request,success

@@ -31,8 +31,8 @@ WORK_START  = datetime.time(2,30,0)
 WORK_END    = datetime.time(10,59,0)
 
 class Status(models.Model):
-     active = models.PositiveSmallIntegerField(default=1,max_length=2, help_text="active or inactive status")
-     trash  = models.PositiveSmallIntegerField(default=0,max_length=2, help_text="deleted or not deleted status")
+     active = models.PositiveSmallIntegerField(default=1, help_text="active or inactive status")
+     trash  = models.PositiveSmallIntegerField(default=0, help_text="deleted or not deleted status")
      class Meta:
          abstract = True
          

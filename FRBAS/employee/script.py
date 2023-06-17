@@ -51,12 +51,13 @@ class EmployeeScript:
 #    Employee Password Change
     def employeePassword(self,request):
          try:
-              employee = Employee.object.get(email=request.session.get('account_email',False))
+              account = Account.object.get(user__email=request.session.get('user_email',False))
               if request.POST['password'] == request.POST['conformpassword']:
-                    employee.password = make_password(request.POST['password'])
-                    request = self.mainscript.set_message("success","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_SUCCESS",request)
+                     account.password = make_password(request.POST['password'])
+                     account.save()
+                     request = self.mainscript.set_message("success","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_SUCCESS",request)
               else:
-                    request = self.mainscript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
+                     request = self.mainscript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
          except Exception as e:
                print(e)
                request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_TWO",request)

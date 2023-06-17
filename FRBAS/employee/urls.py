@@ -3,6 +3,7 @@ from .import views
 
 app_name = 'employee'
 urlpatterns = [
-    path("",views.employeeSignIn,name="signIn"),
-    path("signup/",views.employeeSignUp,name="signup"),
+     path("",views.employeeSignIn,name="signIn"),
+     path("signup/",views.employeeSignUp,name="signup"),
+     path("home/",views.employeeHome,name="home")
 ]

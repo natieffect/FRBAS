@@ -5,12 +5,12 @@ from decorators import is_loged_in,is_loged_out
 @is_loged_in
 def employeeSignUp(request):
      employee = EmployeeScript()
-     gender = employee.employeeGender()
-     country = employee.employeeCountry()
-     autority = employee.employeeAuthority()
      if request.method == "POST":
          request = employee.employeeSignup(request)
-     return render(request,"employee/employeeSignup.html",{"gender":gender,"country":country,"autority":autority})
+     context = {"gender":employee.employeeGender(),
+                "country":employee.employeeCountry(),
+                "autority":employee.employeeAuthority()}
+     return render(request,"employee/employeeSignup.html",context)
 
 #   Employee Account Password Change
 def employeeAccountPassword(request):
@@ -20,10 +20,10 @@ def employeeAccountPassword(request):
 
 #   Employee Sign-in
 @is_loged_in
-def employeeSignIn(request):
-     success = False
+def employeeSignIn(request):    
      employee = EmployeeScript()
      if request.method == "POST":
+         success = False
          request,success = employee.employeeSignIn(request)
          if success:
              return redirect("employee:home")
@@ -33,20 +33,20 @@ def employeeSignIn(request):
 @is_loged_out
 def employeeDepartment(request):
      employee = EmployeeScript()
-     employeeDeparmentAll = employee.employeeModelAll("department")
      if request.method == "POST":
-         request,employeeDeparmentAll = employee.employeeDepartment(request) 
-     return render(request,"employee/employeeDepartment.html",{"employeeDeparmentAll":employeeDeparmentAll})
+         request = employee.employeeDepartment(request) 
+     context = {"employeeDeparmentAll":employee.employeeModelAll("department")}
+     return render(request,"employee/employeeDepartment.html",context)
 
 #   Employee Job
 @is_loged_out
 def employeeJob(request):
      employee = EmployeeScript()
-     employeeJobAll = employee.employeeModelAll("job")
-     employeeDeparmentAll = employee.employeeModelAll("department")
      if request.method == "POST":
-         request,employeeJobAll = employee.employeeJob(request) 
-     return render(request,"employee/employeeJob.html",{"employeeJobAll":employeeJobAll,"employeeDeparmentAll":employeeDeparmentAll})
+         request = employee.employeeJob(request) 
+     context = {"employeeJobAll":employee.employeeModelAll("job"),
+                "employeeDeparmentAll":employee.employeeModelAll("department")}
+     return render(request,"employee/employeeJob.html",context)
 
 #   Employee Job Assign
 @is_loged_out
@@ -54,7 +54,10 @@ def employeeWork(request):
      employee = EmployeeScript()
      if request.method == "POST":
          request = employee.employeeWork(request) 
-     return render(request,"employee/employeeJob.html",{})
+     context = {"employeeAll":employee.employeeModelAll("employee"),
+                "employeeJobAll":employee.employeeModelAll("job"),
+                "employeeWorkAll":employee.employeeModelAll("work")}
+     return render(request,"employee/employeeWork.html",context)
 
 #   Employee Change Password:
 def employeePassword(request):

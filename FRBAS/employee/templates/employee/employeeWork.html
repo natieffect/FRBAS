@@ -1,0 +1,51 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block index%}
+<title>Assign-Work</title>
+<style> </style>
+</head>
+<body>
+    <form action="" method="post">{%csrf_token%}
+        <label for="employee">Employee</label>
+        <select name="employee" id="employee">
+            {%for employeeval in employeeAll%}
+            <option value="{{employeeval.email}}">{{employeeval.fname}}</option>
+            {%endfor%}
+        </select>
+        <label for="job">Job</label>
+        <select name="job" id="job">
+            {%for jobval in employeeJobAll%}
+            <option value="{{jobval.id}}">{{jobval.title}}</option>
+            {%endfor%}
+        </select>
+        <label for="begin">Work start</label>
+        <input type="time" name="begin" id="begin">
+        <label for="finish">Work End</label>
+        <input type="time" name="finish" id="finish">
+        <input type="submit" value="Create">
+    </form>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Employee</th>
+            <th scope="col">JOB</th>
+            <th scope="col">WORK START</th>
+            <th scope="col">WORK END</th>
+            <th scope="col">ASSIGNED BY</th>
+          </tr>
+        </thead>
+        <tbody>
+            {%for workval in employeeWorkAll%}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{workval.employee}}</td>
+            <td>{{workval.job}}</td>
+            <td>{{workval.begin}}</td>
+            <td>{{workval.finish}}</td>
+            <td>{{workval.assigned}}</td>
+          </tr>
+           {%endfor%}
+        </tbody>
+      </table>
+{%endblock%}

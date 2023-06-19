@@ -50,7 +50,7 @@ class EmployeeScript:
 #    Employee Password Change
     def employeePassword(self,request):
          try:
-              account = Account.object.get(user__email=request.session.get('user_email',False))
+              account = Account.object.get(user__email=self.mainscript.sesstionValueGet('email',request))
               if request.POST['password'] == request.POST['conformpassword']:
                      account.password = make_password(request.POST['password'])
                      account.save()
@@ -79,45 +79,42 @@ class EmployeeScript:
 #    Employee Department
     def employeeDepartment(self,request):
          try:
-              employee = Employee.objects.get(email=request.session.get('user_email',False))
               department  = Department(name    =request.POST.get('name'),
                                        detail  =request.POST.get('detail'),
                                        depid   =request.POST.get('depid'),
-                                       creater =employee)
+                                       creater =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
               department.save()
               request = self.mainscript.set_message("success","EMPLOYEE_DEPARTMENT","DEPARTMENT_SUCCESS",request)
          except Exception as e:
               print(e)
               request = self.mainscript.set_message("error","EMPLOYEE_DEPARTMENT","DEPARTMENT_ERROR",request)
               
-         return request,self.employeeModelAll("department")
+         return request
               
 #    Employee Job
     def employeeJob(self,request):
          try:
-              employee   = Employee.objects.get(email=request.session.get('user_email',False))
-              department = Department.objects.get(id=request.POST.get('department'))
-              job = Job(department =department,
+              job = Job(department =Department.objects.get(id=request.POST.get('department')),
                         title      =request.POST.get('title'),
                         detail     =request.POST.get('detail'),
                         jobid      =request.POST.get('jobid'),
-                        creater    =employee)
+                        creater    =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
               request = self.mainscript.set_message("success","EMPLOYEE_JOB","JOB_SUCCESS",request)
               job.save()
          except Exception as e:
               print(e)
               request = self.mainscript.set_message("error","EMPLOYEE_JOB","JOB_ERROR",request)
-         return request,self.employeeModelAll("job")
+         return request
 
 #    Employee Work Assign
     def employeeWork(self,request):
          try:
-              employee = Employee.objects.get(email=request.session.get('user_email',False))
-              work = Work(employee =request.POST.get('employee'),
-                          job      =request.POST.get('job'),
+              work = Work(employee =Employee.objects.get(email=request.POST.get('employee')),
+                          job      =Job.objects.get(id=request.POST.get('job')),
                           begin    =request.POST.get('begin'),
                           finish   =request.POST.get('finish'),
-                          assigned =employee)
+                          assigned =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
+              work.save()
               request = self.mainscript.set_message("success","EMPLOYEE_WORK","WORK_SUCCESS",request)
          except Exception as e:
               print(e)

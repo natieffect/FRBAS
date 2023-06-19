@@ -34,6 +34,13 @@ class FrbasScript:
               request = self.set_message("error","DEFAULT","SESSTION_ERROR",request)
          return request ,success
     
+#    Get Sesstion Value
+    def sesstionValueGet(self,value,request):
+        if value == 'email':
+             return request.session.get('user_email',False)
+        if value == 'authority':
+             return request.session.get('user_autority',False)
+    
 #    Create your views here.
     def log_out(self,request):
         for key in list(request.session.keys()):

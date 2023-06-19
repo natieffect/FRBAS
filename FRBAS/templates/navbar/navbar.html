@@ -2,5 +2,12 @@
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
+      <a href="{%url 'employee:department'%}">Department</a>
+      <a href="{%url 'employee:job'%}">Job</a>
+      <a href="{%url 'employee:work'%}">Work</a>
+      <a href="{%url 'employee:password'%}">Password</a>
+      <p>
+        {{request.session.user_email}}
+      </p>
     </div>
 </nav>

@@ -1,0 +1,47 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block index%}
+<title>JOB</title>
+<style> </style>
+</head>
+<body>
+    <form action="" method="post">{%csrf_token%}
+        <label for="department">Department</label>
+        <select name="department" id="department">
+            {%for departmentval in employeeDeparmentAll%}
+                <option value="{{departmentval.id}}">{{departmentval.name}}</option>
+            {%endfor%}
+        </select>
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" required>
+        <label for="detail">Detail</label>
+        <input type="text" name="detail" id="detail" required>
+        <label for="jobid">ID</label>
+        <input type="text" name="jobid" id="jobid">
+        <input type="submit" value="Create">
+    </form>
+    <table class="table">
+        <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Detail</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Creator</th>
+                </tr>
+        </thead>
+        <tbody>
+            {%for jobval in employeeJobAll%}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{jobval.department}}</td>
+                    <td>{{jobval.title}}</td>
+                    <td>{{jobval.detail}}</td>
+                    <td>{{jobval.jobid}}</td>
+                    <td>{{jobval.creater.fname}}</td>
+                </tr>
+           {%endfor%}
+        </tbody>
+    </table>
+{%endblock%}

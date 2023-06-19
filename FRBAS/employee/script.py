@@ -1,7 +1,6 @@
-from .models import Employee,GENDER,CITY,SYSTEM_AUTHORITY,Account
+from .models import *
 from django.contrib.auth.hashers import make_password, check_password
 from frbasScript import  FrbasScript
-
 
 class EmployeeScript:
     def __init__(self) -> None:
@@ -76,3 +75,86 @@ class EmployeeScript:
                 request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_LOGIN_ERROR",request)
                 print(e)
           return request,success
+
+#    Employee Department
+    def employeeDepartment(self,request):
+         try:
+              employee = Employee.objects.get(email=request.session.get('user_email',False))
+              department  = Department(name    =request.POST.get('name'),
+                                       detail  =request.POST.get('detail'),
+                                       depid   =request.POST.get('depid'),
+                                       creater =employee)
+              department.save()
+              request = self.mainscript.set_message("success","EMPLOYEE_DEPARTMENT","DEPARTMENT_SUCCESS",request)
+         except Exception as e:
+              print(e)
+              request = self.mainscript.set_message("error","EMPLOYEE_DEPARTMENT","DEPARTMENT_ERROR",request)
+              
+         return request,self.employeeModelAll("department")
+              
+#    Employee Job
+    def employeeJob(self,request):
+         try:
+              employee   = Employee.objects.get(email=request.session.get('user_email',False))
+              department = Department.objects.get(id=request.POST.get('department'))
+              job = Job(department =department,
+                        title      =request.POST.get('title'),
+                        detail     =request.POST.get('detail'),
+                        jobid      =request.POST.get('jobid'),
+                        creater    =employee)
+              request = self.mainscript.set_message("success","EMPLOYEE_JOB","JOB_SUCCESS",request)
+              job.save()
+         except Exception as e:
+              print(e)
+              request = self.mainscript.set_message("error","EMPLOYEE_JOB","JOB_ERROR",request)
+         return request,self.employeeModelAll("job")
+
+#    Employee Work Assign
+    def employeeWork(self,request):
+         try:
+              employee = Employee.objects.get(email=request.session.get('user_email',False))
+              work = Work(employee =request.POST.get('employee'),
+                          job      =request.POST.get('job'),
+                          begin    =request.POST.get('begin'),
+                          finish   =request.POST.get('finish'),
+                          assigned =employee)
+              request = self.mainscript.set_message("success","EMPLOYEE_WORK","WORK_SUCCESS",request)
+         except Exception as e:
+              print(e)
+              request = self.mainscript.set_message("error","EMPLOYEE_WORK","WORK_ERROR",request) 
+         return request
+
+#   Employee model value status activate deactivate
+    def statusActivateDeactivate(self,request):
+         if request.POST.get("model") == "employee":
+                employee        = Employee.objects.get(email=request.POST.get("id"))
+                employee.status = request.POST.get("status")
+                employee.trash  = request.POST.get("trash")
+         elif request.POST.get("model") == "account":
+                account        = Account.objects.get(id=request.POST.get("id"))
+                account.status = request.POST.get("status")
+                account.trash  = request.POST.get("trash")
+         elif request.POST.get("model") == "department":
+                department        = Department.objects.get(id=request.POST.get("id"))
+                department.status = request.POST.get("status")
+                department.trash  = request.POST.get("trash")
+         else:
+                job        = Job.objects.get(id=request.POST.get("id"))
+                job.status = request.POST.get("status")
+                job.trash  = request.POST.get("trash")
+
+# Employee model get all value
+    def employeeModelAll(self,model):
+         if model == "employee":
+              return Employee.objects.all()
+         if model == "account":
+              return Account.objects.all()
+         if model == "job":
+              return Job.objects.all()
+         if model == "department":
+              return Department.objects.all()
+         if model == "work":
+              return Work.objects.all()
+
+         
+         

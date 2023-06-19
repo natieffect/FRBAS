@@ -1,0 +1,48 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block index%}
+<title>Department</title>
+<style> </style>
+</head>
+<body>
+    <form action="" method="post">{%csrf_token%}
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required>
+        <label for="detail">Detail</label>
+        <input type="text" name="detail" id="detail" required>
+        <label for="depid">ID</label>
+        <input type="text" name="depid" id="depid" required>
+        <input type="submit" value="Create">
+    </form>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Detail</th>
+            <th scope="col">ID</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Active</th>
+            <th scope="col">Trash</th>
+          </tr>
+        </thead>
+        <tbody>
+            {%for depval in employeeDeparmentAll%}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{depval.name}}</td>
+            <td>{{depval.detail}}</td>
+            <td>{{depval.depid}}</td>
+            <td>{{depval.creater.fname}}</td>
+            <form action="" method="post">
+               <input type="hidden" name="department" value="department">
+               <input type="hidden" name="id" value="{{depval.id}}">
+              <td>{{depval.active}}</td>
+              <td>{{depval.trash}}</td>
+            </form>
+          </tr>
+           {%endfor%}
+        </tbody>
+      </table>
+
+{%endblock%}

@@ -1,10 +1,11 @@
 from .models import *
 from django.contrib.auth.hashers import make_password, check_password
 from frbasScript import  FrbasScript
-
+from script.frbasScriptTime import FrbasScriptTimeDate
 class EmployeeScript:
     def __init__(self) -> None:
          self.mainscript = FrbasScript()
+         self.timeDateValue  = FrbasScriptTimeDate()
 #     Employee Sign Up 
     def employeeSignup(self,request):
         try:
@@ -107,12 +108,12 @@ class EmployeeScript:
          return request
 
 #    Employee Work Assign
-    def employeeWork(self,request):
+    def employeeWork(self,request):        
          try:
               work = Work(employee =Employee.objects.get(email=request.POST.get('employee')),
                           job      =Job.objects.get(id=request.POST.get('job')),
-                          begin    =request.POST.get('begin'),
-                          finish   =request.POST.get('finish'),
+                          begin    =self.timeDateValue.timeAjustValue(request.POST.get('begin')),
+                          finish   =self.timeDateValue.timeAjustValue(request.POST.get('finish')),
                           assigned =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
               work.save()
               request = self.mainscript.set_message("success","EMPLOYEE_WORK","WORK_SUCCESS",request)
@@ -120,7 +121,7 @@ class EmployeeScript:
               print(e)
               request = self.mainscript.set_message("error","EMPLOYEE_WORK","WORK_ERROR",request) 
          return request
-
+              
 #   Employee model value status activate deactivate
     def statusActivateDeactivate(self,request):
          if request.POST.get("model") == "employee":

@@ -1,0 +1,27 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block index%}
+<title>Permisstion</title>
+<style> </style>
+</head>
+<body>
+    <form action="" method="post">{%csrf_token%}
+         <label for="email">Employee Email</label>
+         <input type="email" name="email" id="email" required>
+         <label for="leave">Type Leave</label>
+         <select name="leave" id="leave" >
+             {%for leaveVal in attendaceLeave%}
+              <option value="{{leaveVal.value}}">{{leaveVal.show}}</option>
+             {%endfor%}
+         </select>
+         <label for="detail">Detail</label>
+         <textarea name="detail" id="detail" cols="30" rows="10">
+            
+         </textarea>
+         <label for="start">Leave Start</label>
+         <input type="date" name="start" id="start" required>
+         <label for="finish">Leave End</label>
+         <input type="date" name="finish" id="finish" required>
+         <input type="submit" value="Submit">
+    </form>
+{%endblock%}

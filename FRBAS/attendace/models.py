@@ -22,7 +22,7 @@ class Permission(Detail,Status):
      detail      = models.CharField("Description",max_length=250,help_text="Employee leave permisstion details")
      start       = models.DateField("Start Date",help_text="Leave start date")
      finish      = models.DateField("End Date",help_text="Leave finish date ")
-     autorizer   = models.ForeignKey(Employee,related_name="autorizer",on_delete=models.CASCADE,help_text="Autorized Employee granted leave permisstion")
+     autorizer   = models.ForeignKey(Employee,null=True,related_name="autorizer",on_delete=models.CASCADE,help_text="Autorized Employee granted leave permisstion")
      
      class Meta:
          unique_together = ('employee', 'start', 'leave')

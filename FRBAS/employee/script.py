@@ -4,7 +4,7 @@ from frbasScript import  FrbasScript
 from script.frbasScriptTime import FrbasScriptTimeDate
 class EmployeeScript:
     def __init__(self) -> None:
-         self.mainscript = FrbasScript()
+         self.frbasScript = FrbasScript()
          self.timeDateValue  = FrbasScriptTimeDate()
 #     Employee Sign Up 
     def employeeSignup(self,request):
@@ -18,13 +18,13 @@ class EmployeeScript:
                                    gender = request.POST.get("gender"),
                                    coutry = request.POST.get("country"))
              
-             account = Account(user=employee,password=make_password(self.mainscript.config.get("DEFAULT","PASSWORD")),autority=request.POST.get("autority"))
+             account = Account(user=employee,password=make_password(self.frbasScript.config.get("DEFAULT","PASSWORD")),autority=request.POST.get("autority"))
              employee.save()
              account.save()
-             request = self.mainscript.set_message("success","EMPLOYEE_SIGN_UP","SIGNUP_SUCCESS",request)
+             request = self.frbasScript.set_message("success","EMPLOYEE_SIGN_UP","SIGNUP_SUCCESS",request)
         except Exception as e: 
              print(e)
-             request = self.mainscript.set_message("error","EMPLOYEE_SIGN_UP","SIGNUP_ERROR",request)
+             request = self.frbasScript.set_message("error","EMPLOYEE_SIGN_UP","SIGNUP_ERROR",request)
         return request
    
 #     Employee Gender 
@@ -51,16 +51,16 @@ class EmployeeScript:
 #    Employee Password Change
     def employeePassword(self,request):
          try:
-              account = Account.object.get(user__email=self.mainscript.sesstionValueGet('email',request))
+              account = Account.object.get(user__email=self.frbasScript.sesstionValueGet('email',request))
               if request.POST['password'] == request.POST['conformpassword']:
                      account.password = make_password(request.POST['password'])
                      account.save()
-                     request = self.mainscript.set_message("success","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_SUCCESS",request)
+                     request = self.frbasScript.set_message("success","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_SUCCESS",request)
               else:
-                     request = self.mainscript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
+                     request = self.frbasScript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
          except Exception as e:
                print(e)
-               request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_TWO",request)
+               request = self.frbasScript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_TWO",request)
          return request
 
 #    Employee Log in
@@ -69,11 +69,11 @@ class EmployeeScript:
           try:
               account = Account.objects.get(user__email=request.POST['email'])
               if check_password(request.POST['password'],account.password):
-                   request,success = self.mainscript.login_sesstion(account,request)
+                   request,success = self.frbasScript.login_sesstion(account,request)
               else:
-                   request = self.mainscript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
+                   request = self.frbasScript.set_message("warning","EMPLOYEE_ACCOUNT","ACCOUNT_PASSWORD_ERROR_ONE",request)
           except Exception as e:
-                request = self.mainscript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_LOGIN_ERROR",request)
+                request = self.frbasScript.set_message("error","EMPLOYEE_ACCOUNT","ACCOUNT_LOGIN_ERROR",request)
                 print(e)
           return request,success
 
@@ -83,12 +83,12 @@ class EmployeeScript:
               department  = Department(name    =request.POST.get('name'),
                                        detail  =request.POST.get('detail'),
                                        depid   =request.POST.get('depid'),
-                                       creater =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
+                                       creater =Employee.objects.get(email=self.frbasScript.sesstionValueGet('email',request)))
               department.save()
-              request = self.mainscript.set_message("success","EMPLOYEE_DEPARTMENT","DEPARTMENT_SUCCESS",request)
+              request = self.frbasScript.set_message("success","EMPLOYEE_DEPARTMENT","DEPARTMENT_SUCCESS",request)
          except Exception as e:
               print(e)
-              request = self.mainscript.set_message("error","EMPLOYEE_DEPARTMENT","DEPARTMENT_ERROR",request)
+              request = self.frbasScript.set_message("error","EMPLOYEE_DEPARTMENT","DEPARTMENT_ERROR",request)
               
          return request
               
@@ -99,12 +99,12 @@ class EmployeeScript:
                         title      =request.POST.get('title'),
                         detail     =request.POST.get('detail'),
                         jobid      =request.POST.get('jobid'),
-                        creater    =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
-              request = self.mainscript.set_message("success","EMPLOYEE_JOB","JOB_SUCCESS",request)
+                        creater    =Employee.objects.get(email=self.frbasScript.sesstionValueGet('email',request)))
+              request = self.frbasScript.set_message("success","EMPLOYEE_JOB","JOB_SUCCESS",request)
               job.save()
          except Exception as e:
               print(e)
-              request = self.mainscript.set_message("error","EMPLOYEE_JOB","JOB_ERROR",request)
+              request = self.frbasScript.set_message("error","EMPLOYEE_JOB","JOB_ERROR",request)
          return request
 
 #    Employee Work Assign
@@ -114,12 +114,12 @@ class EmployeeScript:
                           job      =Job.objects.get(id=request.POST.get('job')),
                           begin    =self.timeDateValue.timeAjustValue(request.POST.get('begin')),
                           finish   =self.timeDateValue.timeAjustValue(request.POST.get('finish')),
-                          assigned =Employee.objects.get(email=self.mainscript.sesstionValueGet('email',request)))
+                          assigned =Employee.objects.get(email=self.frbasScript.sesstionValueGet('email',request)))
               work.save()
-              request = self.mainscript.set_message("success","EMPLOYEE_WORK","WORK_SUCCESS",request)
+              request = self.frbasScript.set_message("success","EMPLOYEE_WORK","WORK_SUCCESS",request)
          except Exception as e:
               print(e)
-              request = self.mainscript.set_message("error","EMPLOYEE_WORK","WORK_ERROR",request) 
+              request = self.frbasScript.set_message("error","EMPLOYEE_WORK","WORK_ERROR",request) 
          return request
               
 #   Employee model value status activate deactivate
